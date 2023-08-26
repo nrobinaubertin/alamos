@@ -45,10 +45,8 @@ func contains(s []int, e int) bool {
 	return false
 }
 
-func getKnightMoves(position [2]int, board []int) [][2]int {
-	offsets := [][2]int{{2, 1}, {1, 2}, {-2, 1}, {-1, 2}, {2, -1}, {1, -2}, {-2, -1}, {-1, -2}}
+func offsetMoves(position [2]int, board []int, offsets [][2]int) [][2]int {
 	var moves [][2]int
-
 	piece := board[position[0]*6+position[1]]
 	for _, offset := range offsets {
 		nx, ny := position[0]+offset[0], position[1]+offset[1]
@@ -59,73 +57,51 @@ func getKnightMoves(position [2]int, board []int) [][2]int {
 			}
 		}
 	}
-
 	return moves
 }
 
-func getRookMoves(position [2]int, board []int) [][2]int {
-	directions := [][2]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}
-	var moves [][2]int
-	piece := board[position[0]*6+position[1]]
-	for _, direction := range directions {
-		nx, ny := position[0], position[1]
-		for {
-			nx, ny = nx+direction[0], ny+direction[1]
-			if nx >= 0 && nx < 6 && ny >= 0 && ny < 6 {
-				target := board[nx*6+ny]
-				if target == EMPTY {
-					moves = append(moves, [2]int{nx, ny})
-					continue
-				}
-				if target*piece < 0 {
-					moves = append(moves, [2]int{nx, ny})
-				}
-			}
-			break
-		}
-	}
-	return moves
-}
-
-func getQueenMoves(position [2]int, board []int) [][2]int {
-	diagonalDirections := [][2]int{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
-	var moves [][2]int
-	piece := board[position[0]*6+position[1]]
-	for _, direction := range diagonalDirections {
-		nx, ny := position[0], position[1]
-		for {
-			nx, ny = nx+direction[0], ny+direction[1]
-			if nx >= 0 && nx < 6 && ny >= 0 && ny < 6 {
-				target := board[nx*6+ny]
-				if target == EMPTY {
-					moves = append(moves, [2]int{nx, ny})
-					continue
-				}
-				if target*piece < 0 {
-					moves = append(moves, [2]int{nx, ny})
-				}
-			}
-			break
-		}
-	}
-	moves = append(moves, getRookMoves(position, board)...)
-	return moves
+func getKnightMoves(position [2]int, board []int) [][2]int {
+	offsets := [][2]int{{2, 1}, {1, 2}, {-2, 1}, {-1, 2}, {2, -1}, {1, -2}, {-2, -1}, {-1, -2}}
+	return offsetMoves(position, board, offsets)
 }
 
 func getKingMoves(position [2]int, board []int) [][2]int {
 	offsets := [][2]int{{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
+	return offsetMoves(position, board, offsets)
+}
+
+func vectorMoves(position [2]int, board []int, vectors [][2]int) [][2]int {
 	var moves [][2]int
 	piece := board[position[0]*6+position[1]]
-	for _, offset := range offsets {
-		nx, ny := position[0]+offset[0], position[1]+offset[1]
-		if nx >= 0 && nx < 6 && ny >= 0 && ny < 6 {
-			target := board[nx*6+ny]
-			if target == EMPTY || target*piece < 0 {
-				moves = append(moves, [2]int{nx, ny})
+	for _, vector := range vectors {
+		nx, ny := position[0], position[1]
+		for {
+			nx, ny = nx+vector[0], ny+vector[1]
+			if nx >= 0 && nx < 6 && ny >= 0 && ny < 6 {
+				target := board[nx*6+ny]
+				if target == EMPTY {
+					moves = append(moves, [2]int{nx, ny})
+					continue
+				}
+				if target*piece < 0 {
+					moves = append(moves, [2]int{nx, ny})
+				}
 			}
+			break
 		}
 	}
+	return moves
+}
 
+func getRookMoves(position [2]int, board []int) [][2]int {
+	vectors := [][2]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}
+	return vectorMoves(position, board, vectors)
+}
+
+func getQueenMoves(position [2]int, board []int) [][2]int {
+	vectors := [][2]int{{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
+	var moves [][2]int = vectorMoves(position, board, vectors)
+	moves = append(moves, getRookMoves(position, board)...)
 	return moves
 }
 
@@ -134,9 +110,9 @@ func getPawnMoves(position [2]int, board []int) [][2]int {
 	x, y := position[0], position[1]
 	piece := board[x*6+y]
 
-  dx := 1
+	dx := 1
 	if piece > 0 {
-    dx = -1
+		dx = -1
 	}
 
 	if x+dx >= 0 && x+dx < 6 {
@@ -230,33 +206,24 @@ func negamax(board []int, depth, alpha, beta, color int) ([]int, int) {
 	return bestBoard, bestValue
 }
 
+var charToIntMap = map[rune]int{
+	'.': EMPTY,
+	'P': wP,
+	'p': bP,
+	'R': wR,
+	'r': bR,
+	'N': wN,
+	'n': bN,
+	'Q': wQ,
+	'q': bQ,
+	'K': wK,
+	'k': bK,
+}
+
 func stringToIntBoard(board string) []int {
 	intBoard := make([]int, 36)
 	for i, piece := range board {
-		switch piece {
-		case '.':
-			intBoard[i] = EMPTY
-		case 'P':
-			intBoard[i] = wP
-		case 'p':
-			intBoard[i] = bP
-		case 'R':
-			intBoard[i] = wR
-		case 'r':
-			intBoard[i] = bR
-		case 'N':
-			intBoard[i] = wN
-		case 'n':
-			intBoard[i] = bN
-		case 'Q':
-			intBoard[i] = wQ
-		case 'q':
-			intBoard[i] = bQ
-		case 'K':
-			intBoard[i] = wK
-		case 'k':
-			intBoard[i] = bK
-		}
+		intBoard[i] = charToIntMap[piece]
 	}
 	return intBoard
 }
@@ -264,29 +231,11 @@ func stringToIntBoard(board string) []int {
 func intToStringBoard(intBoard []int) string {
 	board := make([]rune, 36)
 	for i, piece := range intBoard {
-		switch piece {
-		case EMPTY:
-			board[i] = '.'
-		case wP:
-			board[i] = 'P'
-		case bP:
-			board[i] = 'p'
-		case wR:
-			board[i] = 'R'
-		case bR:
-			board[i] = 'r'
-		case wN:
-			board[i] = 'N'
-		case bN:
-			board[i] = 'n'
-		case wQ:
-			board[i] = 'Q'
-		case bQ:
-			board[i] = 'q'
-		case wK:
-			board[i] = 'K'
-		case bK:
-			board[i] = 'k'
+		for char, val := range charToIntMap {
+			if val == piece {
+				board[i] = char
+				break
+			}
 		}
 	}
 	return string(board)
@@ -294,14 +243,12 @@ func intToStringBoard(intBoard []int) string {
 
 func main() {
 	inputBoard := stringToIntBoard(os.Args[1])
-	board, _ := negamax(inputBoard, SEARCH_DEPTH, -HIGH_VALUE, HIGH_VALUE,
-		func() int {
-			if os.Args[2] == "w" {
-				return 1
-			}
-			return -1
-		}(),
-	)
+	color := 1
+	if os.Args[2] == "b" {
+		color = -1
+	}
+
+	board, _ := negamax(inputBoard, SEARCH_DEPTH, -HIGH_VALUE, HIGH_VALUE, color)
 
 	nextTurn := "w"
 	if os.Args[2] == "w" {
