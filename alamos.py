@@ -5,8 +5,8 @@ import sys
 HIGH_VALUE = 100000
 SEARCH_DEPTH = 6
 
-def get_knight_moves(position, board):
-    offsets = [(2, 1), (1, 2), (-2, 1), (-1, 2), (2, -1), (1, -2), (-2, -1), (-1, -2)]
+
+def offset_moves(position, board, offsets):
     for dx, dy in offsets:
         nx, ny = position[0] + dx, position[1] + dy
         if 0 <= nx < 6 and 0 <= ny < 6:
@@ -18,50 +18,40 @@ def get_knight_moves(position, board):
                 yield (nx, ny)
 
 
-def get_rook_moves(position, board):
-    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-    for dx, dy in directions:
-        nx, ny = position
-        while True:
-            nx, ny = nx + dx, ny + dy
-            if 0 <= nx < 6 and 0 <= ny < 6:
-                target = board[nx * 6 + ny]
-                if target == ".":
-                    yield (nx, ny)
-                    continue
-                if target.islower() != board[position[0] * 6 + position[1]].islower():
-                    yield (nx, ny)
-            break
-
-
-def get_queen_moves(position, board):
-    directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
-    for dx, dy in directions:
-        nx, ny = position
-        while True:
-            nx, ny = nx + dx, ny + dy
-            if 0 <= nx < 6 and 0 <= ny < 6:
-                target = board[nx * 6 + ny]
-                if target == ".":
-                    yield (nx, ny)
-                    continue
-                if target.islower() != board[position[0] * 6 + position[1]].islower():
-                    yield (nx, ny)
-            break
-    yield from get_rook_moves(position, board)
+def get_knight_moves(position, board):
+    offsets = [(2, 1), (1, 2), (-2, 1), (-1, 2), (2, -1), (1, -2), (-2, -1), (-1, -2)]
+    yield from offset_moves(position, board, offsets)
 
 
 def get_king_moves(position, board):
     offsets = [(1, 0), (0, 1), (-1, 0), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)]
-    for dx, dy in offsets:
-        nx, ny = position[0] + dx, position[1] + dy
-        if 0 <= nx < 6 and 0 <= ny < 6:
-            target = board[nx * 6 + ny]
-            if (
-                target == "."
-                or target.islower() != board[position[0] * 6 + position[1]].islower()
-            ):
-                yield (nx, ny)
+    yield from offset_moves(position, board, offsets)
+
+
+def vector_moves(position, board, vectors):
+    for dx, dy in vectors:
+        nx, ny = position
+        while True:
+            nx, ny = nx + dx, ny + dy
+            if 0 <= nx < 6 and 0 <= ny < 6:
+                target = board[nx * 6 + ny]
+                if target == ".":
+                    yield (nx, ny)
+                    continue
+                if target.islower() != board[position[0] * 6 + position[1]].islower():
+                    yield (nx, ny)
+            break
+
+
+def get_rook_moves(position, board):
+    vectors = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    yield from vector_moves(position, board, vectors)
+
+
+def get_queen_moves(position, board):
+    vectors = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+    yield from vector_moves(position, board, vectors)
+    yield from get_rook_moves(position, board)
 
 
 def get_pawn_moves(position, board):
@@ -75,18 +65,24 @@ def get_pawn_moves(position, board):
                 target = board[(x + dx) * 6 + (y + dy)]
                 if (
                     target != "."
-                    and target.islower() != board[position[0] * 6 + position[1]].islower()
+                    and target.islower()
+                    != board[position[0] * 6 + position[1]].islower()
                 ):
                     yield (x + dx, y + dy)
 
 
 def evaluate_board(board) -> int:
     piece_values = {
-        "p": -100, "P": 100,
-        "n": -300, "N": 300,
-        "r": -500, "R": 500,
-        "q": -900, "Q": 900,
-        "k": -10000, "K": 10000,
+        "p": -100,
+        "P": 100,
+        "n": -300,
+        "N": 300,
+        "r": -500,
+        "R": 500,
+        "q": -900,
+        "Q": 900,
+        "k": -10000,
+        "K": 10000,
         ".": 0,
     }
     return sum([piece_values[piece] for piece in board])
