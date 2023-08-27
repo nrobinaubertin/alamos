@@ -143,6 +143,8 @@ def negamax(board, depth, alpha, beta, color):
                 alpha = max(alpha, best_value)
                 if alpha >= beta:
                     break
+        if alpha >= beta:
+            break
 
     return best_board, best_value
 

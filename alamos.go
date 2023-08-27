@@ -202,6 +202,9 @@ func negamax(board []int, depth, alpha, beta, color int) ([]int, int) {
 				}
 			}
 		}
+		if alpha >= beta {
+			break
+		}
 	}
 	return bestBoard, bestValue
 }
