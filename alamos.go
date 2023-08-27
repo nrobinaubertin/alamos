@@ -5,6 +5,15 @@ import (
 	"os"
 )
 
+func contains(s []int, e int) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
 const HIGH_VALUE = 100000
 const SEARCH_DEPTH = 6
 
@@ -34,15 +43,6 @@ func evaluateBoard(board []int) int {
 	}
 
 	return score
-}
-
-func contains(s []int, e int) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
 }
 
 func offsetMoves(position [2]int, board []int, offsets [][2]int) [][2]int {
