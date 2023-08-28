@@ -42,3 +42,16 @@ r..k.r.p.pppn..n..P.....K..PPPRN..NR b
 .r.k.r....ppnp.p..P...P.K..PnPRNN..R w
 .r.k.r....ppnP.p......P.K..PnPRNN..R b
 ```
+
+## Results
+
+On my laptop, I get the following results:  
+|--------|------|-------|
+| Python | ~36s | ~8MB  |
+|--------|------|-------|
+| PHP    | ~16s | ~14MB |
+|--------|------|-------|
+| Go     | ~3s  | ~7MB  |
+|--------|------|-------|
+
+Of course, this will vary for each machine, so test on your own!
