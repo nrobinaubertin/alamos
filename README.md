@@ -46,12 +46,11 @@ r..k.r.p.pppn..n..P.....K..PPPRN..NR b
 ## Results
 
 On my laptop, I get the following results:  
-|--------|------|-------|
-| Python | ~36s | ~8MB  |
-|--------|------|-------|
-| PHP    | ~16s | ~14MB |
-|--------|------|-------|
-| Go     | ~3s  | ~7MB  |
-|--------|------|-------|
+
+| Language | Duration | Peak memory usage |
+|----------|----------|-------------------|
+| Python   | ~36s     | ~8MB              |
+| PHP      | ~16s     | ~14MB             |
+| Go       | ~3s      | ~7MB              |
 
 Of course, this will vary for each machine, so test on your own!
