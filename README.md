@@ -18,7 +18,7 @@ The output should be the state of the board and the turn to play so that it can 
 
 The starting input is "rnqknrpppppp............PPPPPPRNQKNR w".
 
-Here is the expected output after 20 turns of selfplay:
+Here is the expected output after 40 turns of selfplay:
 ```
 rnqknrpppppp......P......PPPPPRNQKNR b
 rnqknrpp.ppp..p...P......PPPPPRNQKNR w
@@ -41,6 +41,26 @@ r..k.r.p.pppn..n..P.....K..PPPRN..NR b
 .r.k.r.p..ppn..p..P...P.K..PnPRNN..R b
 .r.k.r....ppnp.p..P...P.K..PnPRNN..R w
 .r.k.r....ppnP.p......P.K..PnPRNN..R b
+.r.k.r....ppnP.p......P.K..P.PRNn..R w
+.r.k.r....ppnP.p......P.K..P.PRNR... b
+..rk.r....ppnP.p......P.K..P.PRNR... w
+..rk.r....ppnP.p..N...P.K..P.PR.R... b
+...k.r....ppnP.p..N...P.K..P.PR.r... w
+...k.r....ppnP.p..N...P.K..P.P..R... b
+.....r...kppnP.p..N...P.K..P.P..R... w
+.....r...kppnP.P..N.....K..P.P..R... b
+.....r....ppnP.k..N.....K..P.P..R... w
+.....r....ppnP.k..NK.......P.P..R... b
+.n...r....pp.P.k..NK.......P.P..R... w
+.n...r....pp.P.k..NK.......P.P....R. b
+.n..r.....pp.P.k..NK.......P.P....R. w
+.n..r.....pp.P.k..NK..R....P.P...... b
+.n...r....pp.P.k..NK..R....P.P...... w
+.n...r....pp.P.k...K..R...NP.P...... b
+.n...r...kpp.P.....K..R...NP.P...... w
+.n...r...kpp.P.....K.R....NP.P...... b
+.n...r....pp.P..k..K.R....NP.P...... w
+.n...r....pp.P..k..K..R...NP.P...... b
 ```
 
 ## Results
@@ -49,8 +69,9 @@ On my laptop, I get the following results:
 
 | Language | Duration | Peak memory usage |
 |----------|----------|-------------------|
-| Python   | ~36s     | ~8MB              |
-| PHP      | ~16s     | ~14MB             |
-| Go       | ~3s      | ~7MB              |
+| Python   | 70.63 s  | 8448 kb           |
+| PHP      | 30.47 s  | 13824 kb          |
+| Go       | 5.01 s   | 9596 kb           |
+| Rust     | 1.73 s   | 1536 kb           |
 
 Of course, this will vary for each machine, so test on your own!
