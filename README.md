@@ -72,6 +72,7 @@ On my laptop, I get the following results:
 | Python   | 70.63 s  | 8448 kb           |
 | PHP      | 30.47 s  | 13824 kb          |
 | Go       | 5.01 s   | 9596 kb           |
+| C        | 2.55 s   | 1280 kb           |
 | Rust     | 1.73 s   | 1536 kb           |
 
 Of course, this will vary for each machine, so test on your own!
