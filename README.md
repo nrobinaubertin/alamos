@@ -69,6 +69,7 @@ On my laptop, I get the following results:
 
 | Language | Duration | Peak memory usage |
 |----------|----------|-------------------|
+| Lua      | 149.30 s | 2432 kb           |
 | Python   | 70.63 s  | 8448 kb           |
 | PHP      | 30.47 s  | 13824 kb          |
 | Go       | 5.01 s   | 9596 kb           |
