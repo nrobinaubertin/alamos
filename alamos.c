@@ -37,7 +37,6 @@ typedef struct {
   int count;
 } PositionArray;
 
-// Function signatures, needed because C requires forward declaration
 int evaluate_board(Piece *board);
 void string_to_int_board(const char *s, Piece *board);
 void int_to_string_board(const Piece *board, char *s);
