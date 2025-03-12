@@ -3,19 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
+	"slices"
 )
 
-func contains(s []int, e int) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
-
-const HIGH_VALUE = 100000
-const SEARCH_DEPTH = 6
+const (
+	HIGH_VALUE   = 100000
+	SEARCH_DEPTH = 6
+)
 
 const (
 	EMPTY = 0
@@ -32,7 +26,7 @@ const (
 )
 
 func evaluateBoard(board []int) int {
-	var pieceValues = []int{
+	pieceValues := []int{
 		-10000, -900, -500, -300, -100,
 		0,
 		100, 300, 500, 900, 10000,
@@ -174,7 +168,7 @@ func getMoves(idx int, piece int, board []int) [][2]int {
 }
 
 func negamax(board []int, depth, alpha, beta, color int) ([]int, int) {
-	if depth == 0 || !contains(board, wK) || !contains(board, bK) {
+	if depth == 0 || !slices.Contains(board, wK) || !slices.Contains(board, bK) {
 		return board, color * evaluateBoard(board)
 	}
 

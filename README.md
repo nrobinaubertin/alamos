@@ -1,9 +1,14 @@
 # Los Alamos Chess
 
 ## Goal
-I want to have a benchmark test to compare performance of a simple algorithm in multiple programming languages.  
+I want to have a benchmark test to compare implementations of a simple algorithm in multiple programming languages.  
 Code should be kept simple and idiomatic.  
 So that the benchmark is neither too complex nor too simple, I've chosen to create a simple AI that plays [Los Alamos Chess](https://www.chessvariants.com/small.dir/losalamos.html).
+
+The idea is that with this project I can test:
+- Performance of those languages in a CPU intensive task
+- How is it to write something simple in that language
+- Also test the capacity of LLMs to translate from a language to another
 
 ## Rules
 The AI should take as input a string of 36 characters representing the occupancy of each square and a string of 1 character reprensenting whose turn it is to play.  
@@ -63,17 +68,9 @@ r..k.r.p.pppn..n..P.....K..PPPRN..NR b
 .n...r....pp.P..k..K..R...NP.P...... b
 ```
 
-## Results
-
-On my laptop, I get the following results:  
-
-| Language | Duration | Peak memory usage |
-|----------|----------|-------------------|
-| Lua      | 149.30 s | 2432 kb           |
-| Python   | 70.63 s  | 8448 kb           |
-| PHP      | 30.47 s  | 13824 kb          |
-| Go       | 5.01 s   | 9596 kb           |
-| C        | 2.55 s   | 1280 kb           |
-| Rust     | 1.73 s   | 1536 kb           |
-
-Of course, this will vary for each machine, so test on your own!
+To simplify the tests, I created the `test.py` script.  
+If you want to test the go implementation for example:
+```
+go build ./alamos.go
+python3 test.py ./alamos
+```
