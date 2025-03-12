@@ -2,7 +2,7 @@
 
 <img
     src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Paul_Stein_and_Nicholas_Metropolis_play_%E2%80%9CLos_Alamos%E2%80%9D_chess_against_the_MANIAC.jpg"
-    width="150"
+    width="250"
     alt="Paul Stein and Nicholas Metropolis play Alamos Chess against the MANIAC"
 />
 
